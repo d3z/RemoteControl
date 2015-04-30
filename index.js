@@ -43,19 +43,19 @@
 
     app.get('/left', function(req, res) {
         send('left', {'direction':'left'});
-        res.status(200, 'OK');
+        res.status(200).send('OK');
     });
 
     app.get('/right', function(req, res) {
         send('right', {'direction':'right'});
-        res.status(200, 'OK');
+        res.status(200).send('OK');
     });
 
     app.get('/forward', function(req, res) {
         var message = {'direction':'forward'};
         send('left', message);
         send('right', message);
-        res.status(200, 'OK');
+        res.status(200).send('OK');
     });
 
     app.listen(http_port, function() {

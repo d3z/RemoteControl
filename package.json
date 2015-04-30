@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/d3z/RemoteControl/issues"
   },
-  "homepage": "https://github.com/d3z/RemoteControl"
+  "homepage": "https://github.com/d3z/RemoteControl",
+  "dependencies": {
+    "express": "^4.12.3",
+    "socket.io": "^1.3.5"
+  }
 }

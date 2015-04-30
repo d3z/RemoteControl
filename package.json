@@ -1,0 +1,20 @@
+{
+  "name": "RemoteControl",
+  "version": "0.0.1",
+  "description": "Control your friends",
+  "main": "index.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/d3z/RemoteControl.git"
+  },
+  "private": true,
+  "author": "Gareth Fleming",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/d3z/RemoteControl/issues"
+  },
+  "homepage": "https://github.com/d3z/RemoteControl"
+}

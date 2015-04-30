@@ -2,9 +2,12 @@
 
     'use strict';
 
-    var app = require('express')();
+    var express = require('express');
+    var app = express();
     var http = require('http').Server(app);
     var io = require('socket.io')(http);
+
+    app.use(express.static(__dirname + '/public'));
 
     var left = io.of('/left');
     var right = io.of('/right');
@@ -19,7 +22,7 @@
         res.status(200, 'OK');
     });
 
-    app.get('/forward', function(req.res) {
+    app.get('/forward', function(req, res) {
         left.emit('move', {'direction':'forward'});
         right.emit('move', {'direction':'forward'});
         res.status(200, 'OK');

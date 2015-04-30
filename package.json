@@ -19,6 +19,6 @@
   "homepage": "https://github.com/d3z/RemoteControl",
   "dependencies": {
     "express": "^4.12.3",
-    "socket.io": "^1.3.5"
+    "ws": "^0.7.1"
   }
 }

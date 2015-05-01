@@ -18,10 +18,11 @@
 
     var ws_server = new WebSocketServer({port: ws_port});
     ws_server.on('connection', function(socket) {
+        var hand;
         socket.on('message', function(message_string) {
             var message = JSON.parse(message_string);
             if (message.hasOwnProperty('register')) {
-                var hand = message.register;
+                hand = message.register;
                 if (hand === 'left' || hand === 'right') {
                     console.log('Client registered on', hand, 'side');
                     remotes[hand] = socket;
@@ -34,6 +35,10 @@
                 console.log(message_string, "received and I don't know what to do with it.");
             }
         });
+        socket.on('close', function(socket) {
+            console.log(hand, 'client unregistered');
+            remotes[hand] = fake_socket;
+        });
     });
 
     function send(to, data) {
@@ -42,17 +47,17 @@
     }
 
     app.get('/left', function(req, res) {
-        send('left', {'direction':'left'});
+        send('left', {'move':'left'});
         res.status(200).send('OK');
     });
 
     app.get('/right', function(req, res) {
-        send('right', {'direction':'right'});
+        send('right', {'move':'right'});
         res.status(200).send('OK');
     });
 
     app.get('/forward', function(req, res) {
-        var message = {'direction':'forward'};
+        var message = {'move':'forward'};
         send('left', message);
         send('right', message);
         res.status(200).send('OK');

@@ -2,7 +2,7 @@
   "name": "RemoteControl",
   "version": "0.0.1",
   "description": "Control your friends",
-  "main": "index.js",
+  "main": "cyfserver.js",
   "scripts": {
     "test": "grunt test"
   },

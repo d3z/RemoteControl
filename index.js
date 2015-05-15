@@ -14,7 +14,7 @@
 
     var fake_socket = {'send': function(message) { console.log(message, 'sent on fake socket'); }};
 
-    var remotes = {'left': fake_socket, 'right': fake_socket};
+    var remotes = {'left': fake_socket, 'right': fake_socket, 'controller': fake_socket};
 
     var ws_server = new WebSocketServer({port: ws_port});
     ws_server.on('connection', function(socket) {
@@ -57,6 +57,7 @@
             if (hand === 'left' || hand === 'right') {
                 console.log('Client registered on', hand, 'side');
                 remotes[hand] = socket;
+                send('controller', {registration: hand});
             }
             else if (hand === 'controller') {
                 handle_controller_registration();
@@ -69,6 +70,7 @@
         function handle_controller_registration() {
             socket.removeListener('message', registration_message_handler);
             socket.on('message', controller_message_handler);
+            remotes['controller'] = socket;
             console.log('controller registered');
         }
 

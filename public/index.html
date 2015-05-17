@@ -2,7 +2,68 @@
 <html>
     <head>
         <title>Control your friends</title>
+        <style type="text/css">
+            #left, #right {
+                display: inline-block;
+                width: 50px;
+                height: 50px;
+                border: solid 2px black;
+            }
+            .off {
+                background-color: #f00;
+            }
+            .on {
+                background-color: #0f0;
+            }
+        </style>
     </head>
     <body>
+        <div>
+            <div id="left" class="off"></div>
+            <div id="right" class="off"></div>
+        </div>
+        <div>
+            <button onclick="left();">LEFT</button>
+            <button onclick="forward();">FORWARD</button>
+            <button onclick="right();">RIGHT</button>
+        </div>		
+        <script type="text/javascript">
+            var register_msg = JSON.stringify({'register':'controller'});
+            var left_msg = JSON.stringify({'move':'left'});
+            var foward_msg = JSON.stringify({'move':'forward'});
+            var right_msg = JSON.stringify({'move':'right'});        
+            
+            var socket = new WebSocket('ws://cyf.joocy.com:5001');
+            socket.onopen = function() {
+                console.log('registering as a controller');
+                socket.send(register_msg);
+            };    
+
+            socket.onmessage = function(message_string) {
+                console.log(message_string);
+                var message = JSON.parse(message_string.data);
+                if (message.hasOwnProperty('registration')) {
+                    document.getElementById(message.registration).className = 'on';
+                }
+                else if (message.hasOwnProperty('unregistration')) {
+                    document.getElementById(message.unregistration).className = 'off';
+                }
+            };
+
+            function left() {
+                console.log('sending a left command');
+                socket.send(left_msg);
+            }
+
+            function forward() {
+                console.log('sending a forward command');
+                socket.send(foward_msg);
+            }
+
+            function right() {
+                console.log('sending a right command');
+                socket.send(right_msg);
+            }
+        </script>
     </body>
 </html>

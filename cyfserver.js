@@ -20,10 +20,13 @@
     ws_server.on('connection', function(socket) {
         var hand;
 
-        var registration_message_handler = function(message_string) {
+        var message_handler = function(message_string) {
             var message = JSON.parse(message_string);
             if (message.hasOwnProperty('register')) {
                 handle_registration(message);
+            }
+            else if (message.hasOwnProperty('unregister')) {
+                handle_unregistration(message);
             }
             else {
                 console.log(message_string, "received and I don't know what to do with it.");
@@ -67,18 +70,38 @@
             }
         }
 
+        function handle_unregistration(message) {
+            var hand = message.unregister;
+            if (hand === 'left' || hand === 'right') {
+                console.log('Client unregistered on', hand, 'side');
+                remotes[hand] = fake_socket;
+                send('controller', {unregistration: hand});
+            }
+            else if (hand === 'controller') {
+                console.log('Controller unregistered');
+                remotes['controller'] = fake_socket;
+            }
+        }
+
         function handle_controller_registration() {
-            socket.removeListener('message', registration_message_handler);
+            socket.removeListener('message', message_handler);
             socket.on('message', controller_message_handler);
             remotes['controller'] = socket;
             console.log('controller registered');
+            if (remotes['left'] !== fake_socket) {
+                send('controller', {registration:'left'});
+            }
+            if (remotes['right'] !== fake_socket) {
+                send('controller', {registration:'right'});
+            }
         }
 
-        socket.on('message', registration_message_handler);
+        socket.on('message', message_handler);
 
         socket.on('close', function(socket) {
             console.log(hand, 'client unregistered');
             remotes[hand] = fake_socket;
+            send('controller', {'unregistration': hand});
         });
     });
 

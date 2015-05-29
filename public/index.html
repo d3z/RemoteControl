@@ -3,10 +3,10 @@
     <head>
         <title>Control your friends</title>
         <style type="text/css">
-            #left, #right {
+            #left_status, #right_status {
                 display: inline-block;
-                width: 25px;
-                height: 25px;
+                width: 20px;
+                height: 20px;
                 border: solid 2px black;
             }
             .off {
@@ -45,14 +45,14 @@
             <h3>Use the arrows below or the arrows on the keyboard</h3>
 
             <div>
-                <img src="images/arrow_left.png" onclick="click_left();" onmousedown="mousedown(this);" onmouseup="mouseup(this);">
-                <img src="images/arrow_up.png" onclick="click_forward();" onmousedown="mousedown(this);" onmouseup="mouseup(this);">
-                <img src="images/arrow_right.png" onclick="click_right();" onmousedown="mousedown(this);" onmouseup="mouseup(this);">
+                <img id="left" src="images/arrow_left.png" onclick="left();" onmousedown="mousedown(this);" onmouseup="mouseup(this);">
+                <img id="up" src="images/arrow_up.png" onclick="forward();" onmousedown="mousedown(this);" onmouseup="mouseup(this);">
+                <img id="right" src="images/arrow_right.png" onclick="right();" onmousedown="mousedown(this);" onmouseup="mouseup(this);">
             </div>
 
             <div>
-                <div id="left" class="off"></div>
-                <div id="right" class="off"></div>
+                <div id="left_status" class="off"></div>
+                <div id="right_status" class="off"></div>
             </div>
         </div>
 
@@ -73,22 +73,35 @@
                 console.log(message_string);
                 var message = JSON.parse(message_string.data);
                 if (message.hasOwnProperty('registration')) {
-                    document.getElementById(message.registration).className = 'on';
+                    document.getElementById(message.registration + '_status').className = 'on';
                 }
                 else if (message.hasOwnProperty('unregistration')) {
-                    document.getElementById(message.unregistration).className = 'off';
+                    document.getElementById(message.unregistration + '_status').className = 'off';
                 }
             };
 
+            document.addEventListener('keydown', function(evt) {
+                var arrow_button = evt.keyIdentifier.toLowerCase();
+                arrow_button = document.getElementById(arrow_button);
+                if (arrow_button !== null) {
+                    mousedown(arrow_button);
+                }
+            });
+
             document.addEventListener('keyup', function(evt) {
-                if (evt.keyIdentifier === 'Left') {
-                    click_left();
+                var arrow_button = evt.keyIdentifier.toLowerCase();
+                if (arrow_button === 'left') {
+                    left();
                 }
-                else if (evt.keyIdentifier === 'Up') {
-                    click_forward();
+                else if (arrow_button === 'up') {
+                    forward();
                 }
-                else if (evt.keyIdentifier === 'Right') {
-                    click_right();
+                else if (arrow_button === 'right') {
+                    right();
+                }
+                arrow_button = document.getElementById(arrow_button);
+                if (arrow_button !== null) {
+                    mouseup(arrow_button);
                 }
             });
 
@@ -98,18 +111,6 @@
 
             function mousedown(arrow) {
                 arrow.className = 'clicked';
-            }
-
-            function click_left() {
-                left();
-            }
-
-            function click_forward() {
-                forward();
-            }
-
-            function click_right() {
-                right();
             }
 
             function left() {

@@ -5,8 +5,8 @@
         <style type="text/css">
             #left, #right {
                 display: inline-block;
-                width: 50px;
-                height: 50px;
+                width: 25px;
+                height: 25px;
                 border: solid 2px black;
             }
             .off {
@@ -15,29 +15,59 @@
             .on {
                 background-color: #0f0;
             }
+            .content {
+                position: relative;
+                text-align: center;
+            }
+            .unclicked {
+                transform: scale(1, 1);
+            }
+            .clicked {
+                transform: scale(0.75, 0.75);
+            }
+            img {
+                width: 250px;
+                height: 250px;
+            }
+            body {
+                font-family: helvetica, sans-serif;
+            }
+            h1, h3 {
+                font-weight: lighter;
+            }
         </style>
     </head>
     <body>
-        <div>
-            <div id="left" class="off"></div>
-            <div id="right" class="off"></div>
+
+        <div class="content">
+            <h1>Control your friends</h1>
+
+            <h3>Use the arrows below or the arrows on the keyboard</h3>
+
+            <div>
+                <img src="images/arrow_left.png" onclick="click_left();" onmousedown="mousedown(this);" onmouseup="mouseup(this);">
+                <img src="images/arrow_up.png" onclick="click_forward();" onmousedown="mousedown(this);" onmouseup="mouseup(this);">
+                <img src="images/arrow_right.png" onclick="click_right();" onmousedown="mousedown(this);" onmouseup="mouseup(this);">
+            </div>
+
+            <div>
+                <div id="left" class="off"></div>
+                <div id="right" class="off"></div>
+            </div>
         </div>
-        <div>
-            <button onclick="left();">LEFT</button>
-            <button onclick="forward();">FORWARD</button>
-            <button onclick="right();">RIGHT</button>
-        </div>		
+
+
         <script type="text/javascript">
             var register_msg = JSON.stringify({'register':'controller'});
             var left_msg = JSON.stringify({'move':'left'});
             var foward_msg = JSON.stringify({'move':'forward'});
-            var right_msg = JSON.stringify({'move':'right'});        
-            
+            var right_msg = JSON.stringify({'move':'right'});
+
             var socket = new WebSocket('ws://cyf.joocy.com:5001');
             socket.onopen = function() {
                 console.log('registering as a controller');
                 socket.send(register_msg);
-            };    
+            };
 
             socket.onmessage = function(message_string) {
                 console.log(message_string);
@@ -49,6 +79,38 @@
                     document.getElementById(message.unregistration).className = 'off';
                 }
             };
+
+            document.addEventListener('keyup', function(evt) {
+                if (evt.keyIdentifier === 'Left') {
+                    click_left();
+                }
+                else if (evt.keyIdentifier === 'Up') {
+                    click_forward();
+                }
+                else if (evt.keyIdentifier === 'Right') {
+                    click_right();
+                }
+            });
+
+            function mouseup(arrow) {
+                arrow.className = 'unclicked';
+            }
+
+            function mousedown(arrow) {
+                arrow.className = 'clicked';
+            }
+
+            function click_left() {
+                left();
+            }
+
+            function click_forward() {
+                forward();
+            }
+
+            function click_right() {
+                right();
+            }
 
             function left() {
                 console.log('sending a left command');

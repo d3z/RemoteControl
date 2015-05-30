@@ -45,9 +45,9 @@
             <h3>Use the arrows below or the arrows on the keyboard</h3>
 
             <div>
-                <img id="left" src="images/arrow_left.png" onclick="left();" onmousedown="mousedown(this);" onmouseup="mouseup(this);">
-                <img id="up" src="images/arrow_up.png" onclick="forward();" onmousedown="mousedown(this);" onmouseup="mouseup(this);">
-                <img id="right" src="images/arrow_right.png" onclick="right();" onmousedown="mousedown(this);" onmouseup="mouseup(this);">
+                <img id="left" src="images/arrow_left.png" onclick="click_left();" onmousedown="mousedown(this);" onmouseup="mouseup(this);">
+                <img id="up" src="images/arrow_up.png" onclick="click_forward();" onmousedown="mousedown(this);" onmouseup="mouseup(this);">
+                <img id="right" src="images/arrow_right.png" onclick="click_right();" onmousedown="mousedown(this);" onmouseup="mouseup(this);">
             </div>
 
             <div>
@@ -111,6 +111,18 @@
 
             function mousedown(arrow) {
                 arrow.className = 'clicked';
+            }
+
+            function click_left(evt) {
+                left();
+            }
+
+            function click_forward(evt) {
+                forward();
+            }
+
+            function click_right(evt) {
+                right();
             }
 
             function left() {
